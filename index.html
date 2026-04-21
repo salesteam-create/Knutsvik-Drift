@@ -765,6 +765,14 @@
       letter-spacing: 0.05em;
     }
     .footer-copy span { color: #555; }
+    .footer-credit {
+      font-size: 13px;
+      color: var(--border);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-credit:hover { color: var(--white); }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
@@ -1114,6 +1122,7 @@
     </div>
     <div class="footer-bottom">
       <p class="footer-copy">© 2025 Knutsvik Drift AS. <span>Alle rettigheter forbeholdt.</span></p>
+      <a class="footer-credit" href="https://kilowott.com" target="_blank" rel="noopener">Powered by Kilowott</a>
     </div>
   </div>
 </footer>

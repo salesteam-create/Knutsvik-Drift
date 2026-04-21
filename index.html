@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Knutsvik Drift — Forrektige Arbeidskar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #000;
+      --white: #fff;
+      --gray: #525252;
+      --light-gray: #a1a1a1;
+      --border: #262626;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: 81px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      background: rgba(0,0,0,0);
+      transition: background 0.3s, border-bottom 0.3s;
+    }
+    header.scrolled {
+      background: var(--black);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo img {
+      height: 36px;
+      filter: invert(1);
+    }
+    header.scrolled .nav-logo img {
+      filter: invert(1);
+    }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      display: inline-block;
+      padding: 10px 24px;
+      background: var(--white);
+      color: var(--black);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+    .nav-cta:hover { background: #e0e0e0; }
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      transition: all 0.3s;
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 81px; left: 0; right: 0;
+      background: var(--black);
+      padding: 24px 40px;
+      z-index: 99;
+      border-top: 1px solid var(--border);
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a {
+      display: block;
+      color: var(--white);
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 600px;
+      overflow: hidden;
+      background: var(--black);
+    }
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.4;
+    }
+    .hero-fallback {
+      position: absolute;
+      inset: 0;
+      background: url('assets/project4.jpg') center/cover no-repeat;
+      opacity: 0.4;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.65) 100%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 100px 40px 160px;
+      max-width: 960px;
+    }
+    .hero-eyebrow {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 20px;
+    }
+    .hero-headline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: clamp(52px, 7vw, 100px);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .hero-sub {
+      font-size: 15px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.75);
+      max-width: 520px;
+      margin-bottom: 48px;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 19px;
+      align-items: center;
+      flex-direction: row;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      padding: 0px;
+      border-width: 0px;
+    }
+    .btn-primary {
+      display: inline-block;
+      padding: 16px 40px;
+      background: var(--white);
+      color: var(--black);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-primary:hover { background: #e8e8e8; }
+    .btn-outline {
+      display: inline-block;
+      padding: 15px 40px;
+      border: 1px solid rgba(255,255,255,0.6);
+      color: var(--white);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
+    .hero-stats {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      z-index: 2;
+    }
+    .hero-stat {
+      flex: 1;
+      padding: 28px 40px;
+      border-right: 1px solid rgba(255,255,255,0.15);
+    }
+    .hero-stat:last-child { border-right: none; }
+    .hero-stat-value {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 40px;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .hero-stat-label {
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── SECTIONS COMMON ── */
+    section { width: 100%; }
+    .section-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 100px 40px;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: clamp(40px, 5vw, 72px);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: var(--black);
+      margin-bottom: 16px;
+    }
+    .section-title.white { color: var(--white); }
+    .section-sub {
+      font-size: 18px;
+      color: var(--gray);
+      max-width: 540px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .section-sub.white { color: var(--light-gray); }
+
+    /* ── OM OSS ── */
+    #om-oss { background: var(--white); }
+    .om-oss-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .om-oss-text h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: clamp(36px, 4vw, 56px);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 32px;
+    }
+    .om-oss-text p {
+      font-size: 17px;
+      line-height: 1.75;
+      color: var(--gray);
+      margin-bottom: 20px;
+    }
+    .om-oss-tag {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 12px 20px;
+      background: var(--black);
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .om-oss-image {
+      position: relative;
+    }
+    .om-oss-image img {
+      width: 100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      display: block;
+    }
+    .om-oss-badge {
+      position: absolute;
+      bottom: 32px;
+      right: -20px;
+      background: var(--black);
+      color: var(--white);
+      padding: 24px 28px;
+      text-align: center;
+    }
+    .om-oss-badge-year {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 52px;
+      line-height: 1;
+      display: block;
+    }
+    .om-oss-badge-label {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--light-gray);
+      display: block;
+      margin-top: 4px;
+    }
+
+    /* ── TJENESTER ── */
+    #tjenester { background: var(--white); border-top: 1px solid #e5e5e5; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--black);
+    }
+    .service-card {
+      background: var(--white);
+      padding: 40px 36px 44px;
+      transition: background 0.25s, color 0.25s;
+      cursor: default;
+    }
+    .service-card:hover {
+      background: var(--black);
+    }
+    .service-card:hover .service-title,
+    .service-card:hover .service-desc {
+      color: var(--white);
+    }
+    .service-card:hover .service-num {
+      color: rgba(255,255,255,0.3);
+    }
+    .service-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      color: #c0c0c0;
+      margin-bottom: 48px;
+    }
+    .service-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 28px;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+      transition: color 0.25s;
+    }
+    .service-desc {
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--gray);
+      transition: color 0.25s;
+    }
+
+    /* ── VÅRT ARBEID ── */
+    #vart-arbeid { background: var(--black); }
+    #vart-arbeid .section-title { color: var(--white); }
+    #vart-arbeid .section-sub { color: var(--light-gray); }
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+    .work-item {
+      position: relative;
+      overflow: hidden;
+    }
+    .work-item img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(20%);
+      transition: transform 0.6s ease, filter 0.3s;
+    }
+    .work-item:hover img {
+      transform: scale(1.03);
+      filter: grayscale(0%);
+    }
+    .work-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 24px;
+      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+      color: var(--white);
+    }
+    .work-label-tag {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 4px;
+    }
+    .work-label-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .work-item.large {
+      grid-column: span 2;
+    }
+    .work-item.large img {
+      aspect-ratio: 16/7;
+    }
+
+    /* ── TEAMET ── */
+    #teamet { background: var(--white); border-top: 1px solid #e5e5e5; }
+    .team-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-top: 64px;
+    }
+    .team-card {
+      position: relative;
+      background: #f5f5f5;
+      overflow: hidden;
+    }
+    .team-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .team-photo-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    /* Subtle striped placeholder per design guidelines */
+    .team-photo-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        #141414 0px,
+        #141414 10px,
+        #1c1c1c 10px,
+        #1c1c1c 20px
+      );
+    }
+    .team-photo-placeholder span {
+      position: relative;
+      z-index: 1;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+    .team-info {
+      padding: 32px 36px 36px;
+      background: var(--black);
+      color: var(--white);
+    }
+    .team-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 36px;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+    .team-role {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--light-gray);
+      margin-bottom: 16px;
+    }
+    .team-bio {
+      font-size: 15px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.65);
+    }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials {
+      background: var(--black);
+      overflow: hidden;
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      margin-top: 64px;
+    }
+    .testimonial-card {
+      background: var(--black);
+      padding: 40px 36px;
+    }
+    .testimonial-quote {
+      font-size: 16px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 32px;
+    }
+    .testimonial-author {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      text-transform: uppercase;
+      color: var(--white);
+      letter-spacing: 0.02em;
+    }
+    .testimonial-meta {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--light-gray);
+      margin-top: 4px;
+    }
+
+    /* ── KONTAKT ── */
+    #kontakt { background: var(--white); border-top: 1px solid #e5e5e5; }
+    .kontakt-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .kontakt-info h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 40px;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+    .kontakt-info p {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--gray);
+      margin-bottom: 32px;
+    }
+    .kontakt-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .kontakt-detail-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .kontakt-detail-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #a0a0a0;
+      margin-bottom: 4px;
+    }
+    .kontakt-detail-value {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--black);
+    }
+    .kontakt-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+    }
+    .form-field {
+      display: flex;
+      flex-direction: column;
+    }
+    .form-field label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray);
+      padding: 16px 20px 0;
+      background: #f7f7f7;
+      border: 1px solid #e0e0e0;
+      border-bottom: none;
+    }
+    .form-field input,
+    .form-field textarea {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--black);
+      background: #f7f7f7;
+      border: 1px solid #e0e0e0;
+      border-top: none;
+      padding: 10px 20px 16px;
+      outline: none;
+      resize: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .form-field input:focus,
+    .form-field textarea:focus {
+      background: #f0f0f0;
+      border-color: var(--black);
+    }
+    .form-full { grid-column: span 2; }
+    .form-field.form-full label { border-right: 1px solid #e0e0e0; }
+    .form-field.form-full input,
+    .form-field.form-full textarea { border-right: 1px solid #e0e0e0; }
+    .form-field:not(:first-child) {
+      border-left: none;
+    }
+    .form-submit {
+      margin-top: 1px;
+    }
+    .form-submit button {
+      width: 100%;
+      padding: 20px;
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .form-submit button:hover { background: #222; }
+    .form-success {
+      display: none;
+      padding: 24px;
+      background: var(--black);
+      color: var(--white);
+      text-align: center;
+      font-size: 15px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      padding: 64px 40px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .footer-brand img {
+      height: 32px;
+      filter: invert(1);
+      margin-bottom: 20px;
+    }
+    .footer-brand p {
+      font-size: 14px;
+      color: var(--light-gray);
+      line-height: 1.6;
+    }
+    .footer-col h4 {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-col ul a {
+      font-size: 14px;
+      color: var(--light-gray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-col ul a:hover { color: var(--white); }
+    .footer-address {
+      font-size: 14px;
+      color: var(--light-gray);
+      line-height: 1.8;
+      font-style: normal;
+    }
+    .footer-email {
+      display: block;
+      margin-top: 8px;
+      font-size: 14px;
+      color: var(--light-gray);
+      text-decoration: none;
+    }
+    .footer-email:hover { color: var(--white); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 32px;
+    }
+    .footer-copy {
+      font-size: 13px;
+      color: var(--border);
+      letter-spacing: 0.05em;
+    }
+    .footer-copy span { color: #555; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .om-oss-grid { grid-template-columns: 1fr; }
+      .om-oss-badge { right: 12px; }
+      .services-grid { grid-template-columns: 1fr; }
+      .work-grid { grid-template-columns: 1fr; }
+      .work-item.large { grid-column: span 1; }
+      .work-item.large img { aspect-ratio: 4/3; }
+      .team-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .kontakt-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .form-full { grid-column: span 1; }
+      .footer-top { grid-template-columns: 1fr; gap: 36px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .hero-stats { display: none; }
+      .hero-content { padding-bottom: 0; }
+      .section-inner { padding: 72px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="main-header">
+  <a class="nav-logo" href="#hero">
+    <img src="assets/logo.png" alt="Knutsvik Drift" />
+  </a>
+  <ul class="nav-links">
+    <li><a href="#om-oss">Om Oss</a></li>
+    <li><a href="#tjenester">Tjenester</a></li>
+    <li><a href="#vart-arbeid">Vårt Arbeid</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+  </ul>
+  <a class="nav-cta" href="#kontakt">Kontakt Oss</a>
+  <div class="nav-hamburger" id="hamburger" aria-label="Åpne meny">
+    <span></span><span></span><span></span>
+  </div>
+</header>
+<nav class="mobile-menu" id="mobile-menu">
+  <a href="#om-oss">Om Oss</a>
+  <a href="#tjenester">Tjenester</a>
+  <a href="#vart-arbeid">Vårt Arbeid</a>
+  <a href="#teamet">Teamet</a>
+  <a href="#kontakt">Kontakt</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <video class="hero-video" autoplay muted loop playsinline poster="assets/project4.jpg">
+    <source src="assets/hero.mp4" type="video/mp4" />
+  </video>
+  <div class="hero-fallback" id="hero-fallback" style="display:none;"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Stavanger, Norge</p>
+    <h1 class="hero-headline">Bygg.<br>Vedlikehold.<br>Kvalitet.</h1>
+    <p class="hero-sub">Din lokale håndverker i Stavanger-regionen. Vi leverer profesjonell renovering og vedlikehold med fokus på kvalitet og pålitelighet.</p>
+    <div class="hero-actions">
+      <a href="#kontakt" class="btn-primary">Kontakt Oss</a>
+      <a href="#tjenester" class="btn-outline">Se Tjenester</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-value">500+</div>
+      <div class="hero-stat-label">Fullførte prosjekter</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">100%</div>
+      <div class="hero-stat-label">Kundetilfredshet</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">2023</div>
+      <div class="hero-stat-label">Etablert</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">Stavanger</div>
+      <div class="hero-stat-label">Basert i</div>
+    </div>
+  </div>
+</section>
+
+<!-- OM OSS -->
+<section id="om-oss">
+  <div class="section-inner">
+    <div class="om-oss-grid">
+      <div class="om-oss-text">
+        <p class="section-label">Om oss</p>
+        <h2>Vi er Knutsvik Drift</h2>
+        <p>Knutsvik Drift AS ble etablert i 2023 og tilbyr førsteklasses håndverkstjenester i Stavanger-regionen. Vi er to dedikerte fagfolk med over 20 års samlet erfaring i bransjen — og vi brenner for å gjøre jobben riktig.</p>
+        <p>Vi tar oppdrag innen renovering, vedlikehold og eiendomsforvaltning for både private og næringskunder. Hos oss er det direkte dialog, ærlige priser og arbeid du kan stole på.</p>
+        <p>Ingen unødvendig byråkrati. Bare kvalitet, fra start til slutt.</p>
+        <span class="om-oss-tag">Forrektige Arbeidskar</span>
+      </div>
+      <div class="om-oss-image">
+        <img src="assets/project2.jpg" alt="Baderomsrenovering — Knutsvik Drift" />
+        <div class="om-oss-badge">
+          <span class="om-oss-badge-year">2023</span>
+          <span class="om-oss-badge-label">Etablert</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TJENESTER -->
+<section id="tjenester">
+  <div class="section-inner">
+    <div class="section-header">
+      <p class="section-label">Hva vi gjør</p>
+      <h2 class="section-title">Våre tjenester</h2>
+      <p class="section-sub">Komplett håndverkstjenester for ditt hjem og næringseiendom</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-num">01</div>
+        <div class="service-title">Boligrenovering</div>
+        <p class="service-desc">Totalrenovering av bad, kjøkken og våtrom. Fra planlegging til ferdigstillelse med høy håndverksmessig standard.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-num">02</div>
+        <div class="service-title">Vaktmester &amp; Vedlikehold</div>
+        <p class="service-desc">Løpende vedlikehold og akutte reparasjoner for borettslag og næringseiendom. Alltid tilgjengelig.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-num">03</div>
+        <div class="service-title">Eiendomsforvaltning</div>
+        <p class="service-desc">Teknisk forvaltning og service for borettslag, sameier og utleieboliger. Trygg og pålitelig forvaltning.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-num">04</div>
+        <div class="service-title">Totalentreprise</div>
+        <p class="service-desc">Komplette renoveringsprosjekter med én kontaktperson fra start til slutt. Vi koordinerer alt — du slipper å bekymre deg.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VÅRT ARBEID -->
+<section id="vart-arbeid">
+  <div class="section-inner">
+    <div class="section-header">
+      <p class="section-label" style="color:rgba(255,255,255,0.4)">Referanseprosjekter</p>
+      <h2 class="section-title white">Vårt arbeid</h2>
+      <p class="section-sub white">Et utvalg av prosjekter vi er stolte av</p>
+    </div>
+    <div class="work-grid">
+      <div class="work-item">
+        <img src="assets/project1.jpg" alt="Baderomsrenovering" />
+        <div class="work-label">
+          <div class="work-label-tag">Renovering</div>
+          <div class="work-label-name">Baderomsrenovering</div>
+        </div>
+      </div>
+      <div class="work-item">
+        <img src="assets/project2.jpg" alt="Marble bad" />
+        <div class="work-label">
+          <div class="work-label-tag">Flislegging & Våtrom</div>
+          <div class="work-label-name">Marmorbad</div>
+        </div>
+      </div>
+      <div class="work-item">
+        <img src="assets/project3.jpg" alt="Kjøkken" />
+        <div class="work-label">
+          <div class="work-label-tag">Kjøkken</div>
+          <div class="work-label-name">Kjøkkenrenovering</div>
+        </div>
+      </div>
+      <div class="work-item">
+        <img src="assets/project4.jpg" alt="Takarbeid" />
+        <div class="work-label">
+          <div class="work-label-tag">Utvendig arbeid</div>
+          <div class="work-label-name">Takvedlikehold</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-inner" style="padding-top:80px; padding-bottom:80px;">
+    <div class="section-header" style="margin-bottom:0;">
+      <p class="section-label" style="color:rgba(255,255,255,0.4)">Kundeomtaler</p>
+      <h2 class="section-title white">Hva våre kunder sier</h2>
+      <p class="section-sub white">Vi er stolte av å levere førsteklasses service</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <p class="testimonial-quote">«Fantastisk jobbet med totalrenovering av badet vårt. Holdt tidsfristen, holdt budsjettet, og resultatet overgikk alle forventninger. Kommer til å bruke dem igjen.»</p>
+        <div class="testimonial-author">Kari Johnsen</div>
+        <div class="testimonial-meta">Badrenovering — Stavanger</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">«Totalrenovering av kjøkken. God kommunikasjon gjennom hele prosjektet, holdt budsjett og tidsfrist. Veldig fornøyd!»</p>
+        <div class="testimonial-author">Lise Håland</div>
+        <div class="testimonial-meta">Kjøkkenrenovering — Stavanger</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">«Bruker Knutsvik Drift som vaktmester for vårt borettslag. Alltid tilgjengelige og løser problemer raskt og effektivt.»</p>
+        <div class="testimonial-author">Tore Nilsen</div>
+        <div class="testimonial-meta">Vaktmestertjenester — Randaberg</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAMET -->
+<section id="teamet">
+  <div class="section-inner">
+    <div class="section-header">
+      <p class="section-label">Menneskene bak</p>
+      <h2 class="section-title">Menneskene bak<br>Knutsvik Drift</h2>
+      <p class="section-sub">To håndverkere med høye standarder og stolthet i arbeidet</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-photo">
+          <img src="assets/andre.jpg" alt="Andre Knutsvik" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;" />
+        </div>
+        <div class="team-info">
+          <div class="team-name">Andre Knutsvik</div>
+          <div class="team-role">Daglig leder &amp; Håndverker</div>
+          <p class="team-bio">Andre Knutsvik er drivkraften bak Knutsvik Drift. Med bred erfaring innen renovering og vedlikehold sikrer han at hvert prosjekt leveres med presisjon, ærlighet og stolthet.</p>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-photo">
+          <div class="team-photo-placeholder">
+            <span>portrettfoto</span>
+          </div>
+        </div>
+        <div class="team-info">
+          <div class="team-name">Stein</div>
+          <div class="team-role">Håndverker &amp; Prosjektansvarlig</div>
+          <p class="team-bio">Stein bringer teknisk kompetanse og faglig tyngde til teamet. Hans grundige tilnærming og øye for detaljer gjør at kundene alltid kan føle seg trygge på at jobben blir gjort riktig.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section id="kontakt">
+  <div class="section-inner">
+    <div class="section-header">
+      <p class="section-label">Ta kontakt</p>
+      <h2 class="section-title">Kontakt Oss</h2>
+      <p class="section-sub">Send oss en forespørsel og vi kommer tilbake til deg så snart som mulig</p>
+    </div>
+    <div class="kontakt-grid">
+      <div class="kontakt-info">
+        <h3>La oss høre fra deg</h3>
+        <p>Ønsker du en uforpliktende befaring eller et tilbud? Fyll ut skjemaet så tar vi kontakt. Vi svarer raskt og ærlig.</p>
+        <div class="kontakt-detail">
+          <div class="kontakt-detail-item">
+            <span class="kontakt-detail-label">E-post</span>
+            <span class="kontakt-detail-value">post@knutsvikdrift.no</span>
+          </div>
+          <div class="kontakt-detail-item">
+            <span class="kontakt-detail-label">Adresse</span>
+            <span class="kontakt-detail-value">Auglendsbakken 48<br>4017 Stavanger, Norge</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <form class="kontakt-form" id="kontakt-form" onsubmit="submitForm(event)">
+          <div class="form-row">
+            <div class="form-field">
+              <label for="navn">Navn</label>
+              <input type="text" id="navn" name="navn" placeholder="Ditt navn" required />
+            </div>
+            <div class="form-field">
+              <label for="epost">E-post</label>
+              <input type="email" id="epost" name="epost" placeholder="din@epost.no" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field form-full">
+              <label for="telefon">Telefon</label>
+              <input type="tel" id="telefon" name="telefon" placeholder="+47 000 00 000" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field form-full">
+              <label for="melding">Melding</label>
+              <textarea id="melding" name="melding" rows="5" placeholder="Beskriv hva du trenger hjelp med..." required></textarea>
+            </div>
+          </div>
+          <div class="form-submit">
+            <button type="submit">Send Forespørsel</button>
+          </div>
+        </form>
+        <div class="form-success" id="form-success">
+          Takk for din henvendelse! Vi tar kontakt med deg snart.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="assets/logo.png" alt="Knutsvik Drift" />
+        <p>Din pålitelige partner for håndverkstjenester i Stavanger-regionen.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Hurtiglenker</h4>
+        <ul>
+          <li><a href="#om-oss">Om Oss</a></li>
+          <li><a href="#tjenester">Tjenester</a></li>
+          <li><a href="#vart-arbeid">Vårt Arbeid</a></li>
+          <li><a href="#teamet">Teamet</a></li>
+          <li><a href="#kontakt">Kontakt</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Tjenester</h4>
+        <ul>
+          <li><a href="#tjenester">Boligrenovering</a></li>
+          <li><a href="#tjenester">Vaktmester</a></li>
+          <li><a href="#tjenester">Eiendomsforvaltning</a></li>
+          <li><a href="#tjenester">Totalentreprise</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Kontakt</h4>
+        <address class="footer-address">
+          Auglendsbakken 48<br>
+          4017 Stavanger<br>
+          Norge
+        </address>
+        <a href="mailto:post@knutsvikdrift.no" class="footer-email">post@knutsvikdrift.no</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2025 Knutsvik Drift AS. <span>Alle rettigheter forbeholdt.</span></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Sticky header
+  const header = document.getElementById('main-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Mobile menu
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  });
+
+  // Video fallback
+  const video = document.querySelector('.hero-video');
+  const fallback = document.getElementById('hero-fallback');
+  if (video) {
+    video.addEventListener('error', () => {
+      video.style.display = 'none';
+      fallback.style.display = 'block';
+    });
+    // If video doesn't start playing within 3s, show fallback
+    setTimeout(() => {
+      if (video.readyState === 0) {
+        video.style.display = 'none';
+        fallback.style.display = 'block';
+      }
+    }, 3000);
+  }
+
+  // Form submit
+  function submitForm(e) {
+    e.preventDefault();
+    const form = document.getElementById('kontakt-form');
+    const success = document.getElementById('form-success');
+    form.style.display = 'none';
+    success.style.display = 'block';
+  }
+
+  // Tweaks
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "heroHeadline": "BYGG. VEDLIKEHOLD. KVALITET.",
+    "showTestimonials": true,
+    "heroOverlayOpacity": 0.35
+  }/*EDITMODE-END*/;
+
+  let tweaksVisible = false;
+  let tweakPanel = null;
+
+  function applyTweaks(t) {
+    const hl = document.querySelector('.hero-headline');
+    if (hl) hl.innerHTML = t.heroHeadline.replace(/\./g, '.<br>').replace(/<br><br>/g, '<br>');
+    const testimonials = document.getElementById('testimonials');
+    if (testimonials) testimonials.style.display = t.showTestimonials ? '' : 'none';
+    const overlay = document.querySelector('.hero-overlay');
+    if (overlay) overlay.style.background = `linear-gradient(to bottom, rgba(0,0,0,${t.heroOverlayOpacity * 0.55}) 0%, rgba(0,0,0,${t.heroOverlayOpacity * 0.75}) 50%, rgba(0,0,0,${t.heroOverlayOpacity}) 100%)`;
+  }
+
+  function buildTweakPanel() {
+    tweakPanel = document.createElement('div');
+    tweakPanel.id = 'tweak-panel';
+    tweakPanel.style.cssText = `
+      position:fixed; bottom:24px; right:24px; z-index:9999;
+      background:#fff; border:1px solid #000; padding:24px 28px;
+      width:300px; font-family:Inter,sans-serif; font-size:14px;
+      box-shadow:4px 4px 0 #000;
+    `;
+    tweakPanel.innerHTML = `
+      <div style="font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px;">Tweaks</div>
+      <label style="display:block;margin-bottom:6px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;">Hero-overskrift</label>
+      <input id="tw-headline" type="text" value="${TWEAK_DEFAULTS.heroHeadline}" style="width:100%;border:1px solid #000;padding:8px 10px;font-size:13px;margin-bottom:16px;font-family:inherit;" />
+      <label style="display:flex;align-items:center;gap:10px;margin-bottom:16px;cursor:pointer;">
+        <input id="tw-testimonials" type="checkbox" ${TWEAK_DEFAULTS.showTestimonials ? 'checked' : ''} />
+        <span>Vis kundeomtaler</span>
+      </label>
+      <label style="display:block;margin-bottom:6px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;">Overlay-styrke: <span id="tw-opacity-val">${TWEAK_DEFAULTS.heroOverlayOpacity}</span></label>
+      <input id="tw-opacity" type="range" min="0.2" max="0.9" step="0.05" value="${TWEAK_DEFAULTS.heroOverlayOpacity}" style="width:100%;margin-bottom:0;" />
+    `;
+    document.body.appendChild(tweakPanel);
+
+    const headline = tweakPanel.querySelector('#tw-headline');
+    const testimonialsCb = tweakPanel.querySelector('#tw-testimonials');
+    const opacity = tweakPanel.querySelector('#tw-opacity');
+    const opacityVal = tweakPanel.querySelector('#tw-opacity-val');
+
+    function update() {
+      const edits = {
+        heroHeadline: headline.value,
+        showTestimonials: testimonialsCb.checked,
+        heroOverlayOpacity: parseFloat(opacity.value)
+      };
+      opacityVal.textContent = edits.heroOverlayOpacity;
+      applyTweaks(edits);
+      window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+    }
+
+    headline.addEventListener('input', update);
+    testimonialsCb.addEventListener('change', update);
+    opacity.addEventListener('input', update);
+  }
+
+  window.addEventListener('message', (e) => {
+    if (e.data?.type === '__activate_edit_mode') {
+      tweaksVisible = true;
+      if (!tweakPanel) buildTweakPanel();
+      tweakPanel.style.display = 'block';
+    }
+    if (e.data?.type === '__deactivate_edit_mode') {
+      tweaksVisible = false;
+      if (tweakPanel) tweakPanel.style.display = 'none';
+    }
+  });
+  window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+
+  applyTweaks(TWEAK_DEFAULTS);
+</script>
+</body>
+</html>
